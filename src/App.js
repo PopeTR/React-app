@@ -15,16 +15,6 @@ class App extends Component {
     showPersons: false
   }
 
-  switchNameHandler = (newName) => {
-   // Dont do this: this.state.persons[0].name = "Thomas"
-    this.setState({persons: [
-      {name: newName, age: 40},
-      {name: 'Tim', age: 28},
-      {name: 'Tam', age: 32}
-      ] 
-    })
-  }
-
   nameChangedHandler = (event) => {
     this.setState({persons: [
       {name: 'Tom', age: 40},
@@ -33,6 +23,14 @@ class App extends Component {
       {name: 'Tam', age: 32}
       ] 
     })
+  }
+
+  deletePersonHandler = (personIndex) => {
+    // previously in the const we were updating the data and manipulating it. This is bad practice so we should either use the spread or slice operator to make a COPY of the code. 
+    // You should always update the state in an unmutable fashion!
+    const persons = [...this.state.persons]; 
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons})
   }
 
   togglePersonsHandler = () => {
@@ -54,17 +52,13 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          <Person 
-              name={this.state.persons[0].name} 
-              age={this.state.persons[0].age}/>
-          <Person 
-              name={this.state.persons[1].name} 
-              age={this.state.persons[1].age}
-              click={this.switchNameHandler.bind(this, 'Tom!')}
-              changed= {this.nameChangedHandler } >My Hobbies: Racing</Person>
-          <Person 
-              name={this.state.persons[2].name} 
-              age={this.state.persons[2].age}/>
+          {/* instead of listing every person out, you can use map to loop through the array and print what we need */}
+          {this.state.persons.map((person, index) => {
+            return <Person 
+              click={() => this.deletePersonHandler(index)}
+              name={person.name} 
+              age={person.age} />
+          })}
         </div>
       );
 
