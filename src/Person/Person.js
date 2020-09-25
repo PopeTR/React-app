@@ -1,13 +1,14 @@
 import React from 'react';
 
-const person = (props) => {
+const person = ( props ) => {
     return (
         <div>
-            <p>I'm {props.name} and I am {props.age} years old!</p>
+            <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
             <p>{props.children}</p> 
-            {/* children takes whatever is in the opening and closing Person tags */}
+            <input type="text" onChange={props.changed} value={props.name}/>
+            {/* the value= updates the name to whatever it is changed to in the state.  */}
         </div>
-)
+    )
 };
 
 export default person;
