@@ -49,6 +49,26 @@ class App extends Component {
       cursor: 'pointer'
     };
 // the above is inline styling, like you would use in HTML. Careful as the properties need to be STRINGS!
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person 
+              name={this.state.persons[0].name} 
+              age={this.state.persons[0].age}/>
+          <Person 
+              name={this.state.persons[1].name} 
+              age={this.state.persons[1].age}
+              click={this.switchNameHandler.bind(this, 'Tom!')}
+              changed= {this.nameChangedHandler } >My Hobbies: Racing</Person>
+          <Person 
+              name={this.state.persons[2].name} 
+              age={this.state.persons[2].age}/>
+        </div>
+      );
+
+    }
 
     return (
       <div className="App">
@@ -58,25 +78,10 @@ class App extends Component {
         // in order to call the inline style above for your button, you need to do the following.  
         style={style}
         onClick={this.togglePersonsHandler}>Toggle Persons</button>
-        { 
-          this.state.showPersons ? 
-            <div>
-            <Person 
-                name={this.state.persons[0].name} 
-                age={this.state.persons[0].age}/>
-            <Person 
-                name={this.state.persons[1].name} 
-                age={this.state.persons[1].age}
-                click={this.switchNameHandler.bind(this, 'Tom!')}
-                changed= {this.nameChangedHandler } >My Hobbies: Racing</Person>
-            <Person 
-                name={this.state.persons[2].name} 
-                age={this.state.persons[2].age}/>
-          </div> : null
-        }
+        {persons}
+        
       </div>
     );
-  // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Hi I\'m a React App'));
   }
 }
 
