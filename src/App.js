@@ -7,22 +7,30 @@ class App extends Component {
   // State can only be used in class based components
   state = {
     persons: [
-      {name: 'Tom', age: 30},
-      {name: 'Tim', age: 28},
-      {name: 'Tam', age: 32}
+      // we assign ID's so we can identify elements that might get edited or deleted
+      {id: '1', name: 'Tom', age: 30},
+      {id: '2', name: 'Tim', age: 28},
+      {id: '3', name: 'Tam', age: 32}
     ], 
     otherState: 'some other value',
     showPersons: false
   }
 
-  nameChangedHandler = (event) => {
-    this.setState({persons: [
-      {name: 'Tom', age: 40},
-      // the below syntax is an event that is called, take that value
-      {name: event.target.value, age: 28},
-      {name: 'Tam', age: 32}
-      ] 
-    })
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id; 
+    });
+
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+    // we use the spread operator here to avoid mutating data and so creating a copy
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState( {persons: persons} );
   }
 
   deletePersonHandler = (personIndex) => {
@@ -57,7 +65,10 @@ class App extends Component {
             return <Person 
               click={() => this.deletePersonHandler(index)}
               name={person.name} 
-              age={person.age} />
+              age={person.age}
+              // adding a key property element so react can understand which elements changed and which didnt
+              key={person.id} 
+              changed={(event) => this.nameChangedHandler(event, person.id)} />
           })}
         </div>
       );
