@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, { StyleRoot } from 'radium'; // this allows you to use media and hover queries in your inline styles!
+// import Radium, { StyleRoot } from 'radium'; // this allows you to use media and hover queries in your inline styles!
 import styled from 'styled-components';
 // Another great library you can use is styled-components.com
 // you need to import css into JS. React deals with this. 
+
+// cool special syntax below that uses props to change the styling dependant on the state. You can see we parsed the props into the <StyledButton> wrapper below. 
+const StyledButton = styled.button`
+  background-color: ${props => props.alt ? 'red' : 'green'};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+    color: black;
+  }
+`;
 
 class App extends Component {
   // State can only be used in class based components
@@ -81,11 +96,11 @@ class App extends Component {
         </div>
       );
       // Dynamic styling here so that when the people are shown, the button then changes to red!
-          style.backgroundColor = 'red';
-          style[':hover'] = {
-            backgroundColor: 'salmon',
-            color: 'black'
-          };
+          // style.backgroundColor = 'red';
+          // style[':hover'] = {
+          //   backgroundColor: 'salmon',
+          //   color: 'black'
+          // };
       }
     // this is a generic class list
     const classes = [];
@@ -99,22 +114,20 @@ class App extends Component {
 
     return (
       // Here we are wrapping our entire code in the StyleRoot radium component so you can access the media queries
-      <StyleRoot> 
         <div className="App">
           <h1>Hi Im a React App</h1>
           {/* Youll see the classes varibale stored above is used here. To display multiple classes, you need to add the join element */}
           <p className={classes.join(' ')}>This is really working!</p>
           {/* the below syntax this.switchNameHandler is not preferred over the bind syntax below.  */}
-          <button 
-          // in order to call the inline style above for your button, you need to do the following.  
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>
+          {/* Below is using the styledbutton variable styles above and we are parsing in a state to change the style based on state. */}
+          <StyledButton alt={this.state.showPersons} onClick={this.togglePersonsHandler}>
+            Toggle Persons
+          </StyledButton>        
           {persons}
         </div>
-      </StyleRoot>
     );
   }
 }
 
 // Here we are injecting functionality to our current app. 
-export default Radium(App);
+export default App;

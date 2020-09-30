@@ -1,23 +1,34 @@
 import React from 'react';
 import './Person.css';
-import Radium from 'radium';
+import styled from 'styled-components';
+// import Radium from 'radium';
 // the above import was added for purposes of linking the css
 
-const person = ( props ) => {
-    // The below is a media query that we can use through radium
-    const style = {
-        '@media (min-width: 500px)': {
-            width: '450px'
-        }
+// below you will see the work of styled components. It is saved to a variable and then you wrap all the content in the variable below. 
+const StyledDiv = styled.div`
+    width: 60%;
+    margin: 16px auto;
+    border: 1px solid #eee;
+    box-shadow: 0 0 15px;
+    padding: 16px;
+    text-align: center;
+ 
+    @media (min-width: 500px) {
+       width: 450px;
     }
+ `;
+
+const person = ( props ) => {
     return (
-        <div className="Person" style={style}>
-            <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
-            <p>{props.children}</p> 
-            <input type="text" onChange={props.changed} value={props.name}/>
-            {/* the value= updates the name to whatever it is changed to in the state.  */}
-        </div>
+        // <div className="Person" style={style}> When using radium
+        // Below is the correct code for styled components
+            <StyledDiv>
+                <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
+                <p>{props.children}</p> 
+                <input type="text" onChange={props.changed} value={props.name}/>
+                {/* the value= updates the name to whatever it is changed to in the state.  */}
+            </StyledDiv>
     )
 };
 
-export default Radium(person);
+export default person;
