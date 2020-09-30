@@ -7,4 +7,10 @@
    text-align: center;
 }
 
+/* @media (min-width: 500px) {
+   .Person {
+      width: 450px;
+   }
+} */
+
 /* this is inputted to html through webpack. You will see style tags in the browser */

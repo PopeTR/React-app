@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium, { StyleRoot } from 'radium'; // this allows you to use media and hover queries in your inline styles!
+import styled from 'styled-components';
+// Another great library you can use is styled-components.com
 // you need to import css into JS. React deals with this. 
 
 class App extends Component {
@@ -48,11 +51,16 @@ class App extends Component {
   
   render () {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 // the above is inline styling, like you would use in HTML. Careful as the properties need to be STRINGS!
     let persons = null;
@@ -72,22 +80,41 @@ class App extends Component {
           })}
         </div>
       );
-
+      // Dynamic styling here so that when the people are shown, the button then changes to red!
+          style.backgroundColor = 'red';
+          style[':hover'] = {
+            backgroundColor: 'salmon',
+            color: 'black'
+          };
+      }
+    // this is a generic class list
+    const classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push('red'); // classes = ['red']
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold'); // classes = ['red', 'bold']
     }
 
+
     return (
-      <div className="App">
-        <h1>Hi Im a React App</h1>
-        {/* the below syntax this.switchNameHandler is not preferred over the bind syntax below.  */}
-        <button 
-        // in order to call the inline style above for your button, you need to do the following.  
-        style={style}
-        onClick={this.togglePersonsHandler}>Toggle Persons</button>
-        {persons}
-        
-      </div>
+      // Here we are wrapping our entire code in the StyleRoot radium component so you can access the media queries
+      <StyleRoot> 
+        <div className="App">
+          <h1>Hi Im a React App</h1>
+          {/* Youll see the classes varibale stored above is used here. To display multiple classes, you need to add the join element */}
+          <p className={classes.join(' ')}>This is really working!</p>
+          {/* the below syntax this.switchNameHandler is not preferred over the bind syntax below.  */}
+          <button 
+          // in order to call the inline style above for your button, you need to do the following.  
+          style={style}
+          onClick={this.togglePersonsHandler}>Toggle Persons</button>
+          {persons}
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+// Here we are injecting functionality to our current app. 
+export default Radium(App);
