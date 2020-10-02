@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // this is the modular approach to using CSS
 import styles from './App.module.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBounday'
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 // import Radium, { StyleRoot } from 'radium'; // this allows you to use media and hover queries in your inline styles!
 // import styled from 'styled-components';
 // Another great library you can use is styled-components.com
@@ -71,25 +71,13 @@ class App extends Component {
 
 // the above is inline styling, like you would use in HTML. Careful as the properties need to be STRINGS!
     let persons = null;
-    let btnClass = [styles.button];
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {/* instead of listing every person out, you can use map to loop through the array and print what we need */}
-          {this.state.persons.map((person, index) => {
-            return <ErrorBoundary key={person.id}>
-              <Person 
-              click={() => this.deletePersonHandler(index)}
-              name={person.name} 
-              age={person.age}
-              // adding a key property element so react can understand which elements changed and which didnt
-               
-              changed={(event) => this.nameChangedHandler(event, person.id)} />
-            </ErrorBoundary>
-          })}
-        </div>
-      );
+      persons = <Persons
+            persons={this.state.persons}
+            changed={this.nameChangedHandler}
+            clicked={this.deletePersonHandler} />;
+    }
       // Dynamic styling here so that when the people are shown, the button then changes to red!
           // style.backgroundColor = 'red';
           // style[':hover'] = {
@@ -97,35 +85,17 @@ class App extends Component {
           //   color: 'black'
           // };
 
-          // Below is the syling used with modular CSS
-          btnClass.push(styles.Red);
-      }
-    // this is a generic class list
-    const classes = [];
-    if (this.state.persons.length <= 2) {
-      classes.push('red'); // classes = ['red']
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push('bold'); // classes = ['red', 'bold']
-    }
-
-
     return (
       // Here we are wrapping our entire code in the StyleRoot radium component so you can access the media queries
         <div className={styles.App}>
-          <h1>Hi Im a React App</h1>
-          {/* Youll see the classes varibale stored above is used here. To display multiple classes, you need to add the join element */}
-          <p className={classes.join(' ')}>This is really working!</p>
-          {/* the below syntax this.switchNameHandler is not preferred over the bind syntax below.  */}
-          {/* Below is using the styledbutton variable styles above and we are parsing in a state to change the style based on state. */}
-          <button className={btnClass.join(' ')} onClick={this.togglePersonsHandler}>
-            Toggle Persons
-          </button>        
+          <Cockpit 
+            showPersons={this.state.showPersons}
+            persons={this.state.persons}
+            clicked={this.togglePersonsHandler}/>
           {persons}
         </div>
     );
   }
 }
 
-// Here we are injecting functionality to our current app. 
 export default App;
